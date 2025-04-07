@@ -1,0 +1,106 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Configurateur de Bowl</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    h2 {
+      color: #444;
+    }
+    .section {
+      margin-bottom: 20px;
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+    label {
+      display: block;
+      margin: 5px 0;
+    }
+    .summary {
+      background: #fffbe6;
+      padding: 10px;
+      border-radius: 10px;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>🥗 Compose ton Bowl</h1>
+
+  <form id="bowlForm">
+    <div class="section">
+      <h2>1. Protéine (1 choix)</h2>
+      <label><input type="radio" name="proteine" value="185|1.3|15|12.7"> 2 Oeufs Mollets</label>
+      <label><input type="radio" name="proteine" value="187|0|26.4|9.1"> Sardine 120g</label>
+      <label><input type="radio" name="proteine" value="140|6|28|0.8"> Poulet Mariné Yatakori</label>
+      <label><input type="radio" name="proteine" value="150|2.9|21|6.2"> Saumon Gravlax 100g</label>
+    </div>
+
+    <div class="section">
+      <h2>2. Glucide (1 choix)</h2>
+      <label><input type="radio" name="glucide" value="78|13.5|3|1.1"> Toast Pain Grillé</label>
+      <label><input type="radio" name="glucide" value="14|0.4|0|0"> Konjac</label>
+      <label><input type="radio" name="glucide" value="180|36|3.1|0.6"> Riz au Curcuma</label>
+      <label><input type="radio" name="glucide" value="149|27.9|5|1.1"> Quinoa</label>
+    </div>
+
+    <div class="section">
+      <h2>3. Toppings (jusqu'à 5)</h2>
+      <label><input type="checkbox" name="topping" value="40|9|0.8|0"> Carotte râpée</label>
+      <label><input type="checkbox" name="topping" value="15|4|0.6|0.1"> Concombre</label>
+      <label><input type="checkbox" name="topping" value="11|2.2|1.3|0.1"> Champignon</label>
+      <label><input type="checkbox" name="topping" value="17|2.6|0.6|0.1"> Tomate</label>
+      <label><input type="checkbox" name="topping" value="16|2.6|1.1|0.2"> Courgette</label>
+      <label><input type="checkbox" name="topping" value="8|1.5|0.3|0.1"> Radis</label>
+      <label><input type="checkbox" name="topping" value="26|6|0.9|0.1"> Poivrons confits</label>
+      <label><input type="checkbox" name="topping" value="108|5.8|1.4|9.9"> 1/2 Avocat</label>
+      <label><input type="checkbox" name="topping" value="55|9.8|3.8|0.2"> Fèves</label>
+      <label><input type="checkbox" name="topping" value="12|2.4|1.2|0.1"> Haricot mungo</label>
+      <label><input type="checkbox" name="topping" value="50|10|3|0.2"> Petit pois</label>
+    </div>
+
+    <div class="section">
+      <h2>4. Sauce (1 choix)</h2>
+      <label><input type="radio" name="sauce" value="102|25|4.5|0"> Sauce Soja</label>
+      <label><input type="radio" name="sauce" value="99|0|0|11"> Huile d'olive + Vinaigre + Citron</label>
+    </div>
+  </form>
+
+  <div class="summary" id="result">
+    🔥 Calories : 0 kcal | 🥩 Protéines : 0 g | 🍞 Glucides : 0 g | 🥑 Lipides : 0 g
+  </div>
+
+  <script>
+    const form = document.getElementById('bowlForm');
+    const result = document.getElementById('result');
+
+    form.addEventListener('change', () => {
+      let kcal = 0, glucide = 0, proteine = 0, lipide = 0;
+      const selected = form.querySelectorAll('input:checked');
+      let toppingCount = 0;
+
+      selected.forEach(input => {
+        const [k, g, p, l] = input.value.split('|').map(parseFloat);
+        if (input.name === 'topping') toppingCount++;
+        kcal += k; glucide += g; proteine += p; lipide += l;
+      });
+
+      if (toppingCount > 5) {
+        result.innerHTML = '❌ Maximum 5 toppings autorisés';
+      } else {
+        result.innerHTML = `🔥 Calories : ${Math.round(kcal)} kcal | 🍞 Glucides : ${glucide.toFixed(1)} g | 🥩 Protéines : ${proteine.toFixed(1)} g | 🥑 Lipides : ${lipide.toFixed(1)} g`;
+      }
+    });
+  </script>
+</body>
+</html>
